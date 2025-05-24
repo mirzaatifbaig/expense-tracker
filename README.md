@@ -23,7 +23,8 @@
 - 📦 **Import & export**: backup and restore your data easily
 - 📊 **Visual reports**: see your spending over time and by category
 - 🪙 **Multi-currency** & locale-aware formatting
-- 🧩 **Responsive, accessible UI** with [Radix UI](https://www.radix-ui.com/) + [TailwindCSS](https://tailwindcss.com/)
+- 📅 **Budget tracking and dashboards** for insightful overviews
+- 🧩 **Responsive, accessible UI** with [Shadcn](https://ui.shadcn.com/) + [TailwindCSS](https://tailwindcss.com/)
 - ..._add more as your project grows!_
 
 ---
@@ -54,7 +55,7 @@ http://localhost:5173
 | [React](https://reactjs.org/)         | Frontend UI framework                     |
 | [Vite](https://vitejs.dev/)           | Lightning-fast dev/build tool             |
 | [TailwindCSS](https://tailwindcss.com/)| Utility-first CSS framework               |
-| [Radix UI](https://www.radix-ui.com/) | Accessible, customizable UI components    |
+| [Shadcn](https://ui.shadcn.com/) | Accessible, customizable UI components    |
 | [Lucide React](https://lucide.dev/)   | Beautiful, consistent icons               |
 
 ---
@@ -63,16 +64,20 @@ http://localhost:5173
 
 ```text
 expense-tracker/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── lib/
-│   ├── App.jsx
-│   └── main.jsx
 ├── public/
+├── src/
+│   ├── assets/         # Images and static files
+│   ├── components/     # Reusable UI components
+│   ├── hooks/          # Custom React hooks
+│   ├── lib/            # Utilities/libraries (db, formatters, etc)
+│   ├── pages/          # Page components (Dashboard, Expenses, Reports, etc)
+│   ├── App.jsx         # Main App component
+│   └── main.jsx        # App entry point
 ├── package.json
+├── tailwind.config.js
 ├── vite.config.js
-└── README.md
+├── README.md
+└── ...other configs
 ```
 
 ---
