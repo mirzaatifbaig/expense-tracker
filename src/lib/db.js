@@ -1,4 +1,5 @@
-import { openDB } from "idb";
+import {openDB} from "idb";
+
 const DB_VERSION = 1;
 const DB_NAME = "expense-tracker-db";
 class DatabaseService {

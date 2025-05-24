@@ -1,10 +1,11 @@
-import { BellIcon, SearchIcon, Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {BellIcon, Menu, SearchIcon, X} from "lucide-react";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
 import ThemeToggle from "../ThemeToggle";
-import { useEffect, useState } from "react";
-import { db } from "@/lib/db";
-import { formatCurrency } from "@/lib/format";
+import {useEffect, useState} from "react";
+import {db} from "@/lib/db";
+import {formatCurrency} from "@/lib/format";
+
 export default function Header({ sidebarOpen, toggleSidebar }) {
   const [settings, setSettings] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");

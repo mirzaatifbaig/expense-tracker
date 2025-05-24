@@ -1,4 +1,5 @@
-import { Workbox, messageSW } from "workbox-window";
+import {messageSW, Workbox} from "workbox-window";
+
 let wb = null;
 let registration = null;
 export async function registerServiceWorker() {

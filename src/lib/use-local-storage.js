@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import {useEffect, useState} from "react";
+
 export function useLocalStorage(key, initialValue) {
   const readValue = () => {
     if (typeof window === "undefined") {

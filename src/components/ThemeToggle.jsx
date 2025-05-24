@@ -1,12 +1,8 @@
-import { MoonIcon, SunIcon, MonitorIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useTheme } from "@/lib/theme-provider";
+import {MonitorIcon, MoonIcon, SunIcon} from "lucide-react";
+import {Button} from "@/components/ui/button";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
+import {useTheme} from "@/lib/theme-provider";
+
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   return (

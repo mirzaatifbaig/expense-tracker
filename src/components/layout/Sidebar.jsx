@@ -1,17 +1,10 @@
-import { useNavigate, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { motion } from "framer-motion";
-import {
-  Home,
-  ReceiptText,
-  Tags,
-  Wallet,
-  BarChart3,
-  Settings,
-  Plus,
-} from "lucide-react";
+import {useLocation, useNavigate} from "react-router-dom";
+import {Button} from "@/components/ui/button";
+import {ScrollArea} from "@/components/ui/scroll-area";
+import {Separator} from "@/components/ui/separator";
+import {motion} from "framer-motion";
+import {BarChart3, Home, Plus, ReceiptText, Settings, Tags, Wallet,} from "lucide-react";
+
 export default function Sidebar({ onClose, categories }) {
   const navigate = useNavigate();
   const location = useLocation();

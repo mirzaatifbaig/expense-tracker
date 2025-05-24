@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { db } from "./lib/db";
+import {useEffect, useState} from "react";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {AnimatePresence, motion} from "framer-motion";
+import {db} from "./lib/db";
 import Layout from "./components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Expenses from "./pages/Expenses";
@@ -9,8 +9,9 @@ import SettingsComponent from "./pages/Settings";
 import Categories from "./pages/Categories";
 import Budgets from "./pages/Budgets";
 import Reports from "./pages/Reports";
-import { Skeleton } from "./components/ui/skeleton";
-import { Toaster } from "sonner";
+import {Skeleton} from "./components/ui/skeleton";
+import {Toaster} from "sonner";
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [settings, setSettings] = useState(null);
