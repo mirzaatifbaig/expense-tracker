@@ -76,7 +76,7 @@ const SettingsComponent = () => {
   );
 
   const SkeletonCard = ({ hasSubItems = false }) => (
-      <div className="rounded-xl bg-zinc-900/90 border border-zinc-700/50 p-5">
+      <div className="rounded-xl bg-zinc-900/90 border border-zinc-700/50 p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <Skeleton className="w-9 h-9 rounded-lg bg-zinc-800" />
