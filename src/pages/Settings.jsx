@@ -1,433 +1,289 @@
-import React, {useState} from "react";
+import {useEffect, useState} from "react";
 import {
-  Battery,
-  Bell,
-  Camera,
-  Cloud,
-  CreditCard,
-  Download,
-  Eye,
-  Globe,
-  Key,
-  Lock,
-  Mail,
-  MessageSquare,
-  Mic,
-  Monitor,
-  Moon,
-  Shield,
-  Smartphone,
-  Sun,
-  Trash2,
-  User,
-  Volume2,
-  Wifi,
-  Zap,
+  Battery, Bell, Camera, Cloud, CreditCard, Download, Eye, Globe, Key, Lock,
+  Mail, MessageSquare, Mic, Monitor, Moon, Shield, Smartphone, Sun, Trash2,
+  User, Volume2, Wifi, Zap
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const SettingsComponent = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [settings, setSettings] = useState({
-    darkMode: true,
-    notifications: true,
-    autoSave: false,
-    privacy: true,
-    location: false,
-    camera: true,
-    microphone: false,
-    zinctooth: true,
-    wifi: true,
-    autoUpdate: true,
-    backupCloud: false,
-    twoFactor: true,
-    faceId: true,
-    analytics: false,
-    marketing: false,
-    newsletter: true,
-    soundEffects: true,
-    hapticFeedback: false,
-    autoSync: true,
-    lowPowerMode: false,
+    darkMode: true, notifications: true, privacy: true, wifi: true,
+    camera: true, autoUpdate: true, twoFactor: true, faceId: true,
+    soundEffects: true, autoSync: true, marketing: false, newsletter: true,
+    analytics: false, bluetooth: true, location: false, microphone: false,
+    backupCloud: false, lowPowerMode: false
   });
-  const toggleSetting = (key) => {
-    setSettings((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
-  const ToggleSwitch = ({ enabled, onToggle, color = "zinc" }) => {
-    const colorClasses = {
-      zinc: enabled
-        ? "bg-gradient-to-r from-zinc-400 to-zinc-600 shadow-lg shadow-zinc-500/30"
-        : "bg-zinc-600 hover:bg-zinc-500",
-    };
-    return (
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const toggle = (key) => setSettings(prev => ({ ...prev, [key]: !prev[key] }));
+
+  const Toggle = ({ enabled, onToggle }) => (
       <div
-        className={`relative inline-flex h-7 w-12 cursor-pointer rounded-full transition-all duration-300 ${colorClasses[color] || colorClasses.zinc}`}
-        onClick={onToggle}
+          className={`relative inline-flex h-6 w-11 cursor-pointer rounded-full transition-colors duration-200 ${
+              enabled ? 'bg-zinc-500' : 'bg-zinc-700'
+          }`}
+          onClick={onToggle}
       >
-        <div
-          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out ${
-            enabled ? "translate-x-6" : "translate-x-1"
-          } mt-1`}
-        />
+        <div className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200 ${
+            enabled ? 'translate-x-6' : 'translate-x-1'
+        } mt-1`} />
       </div>
-    );
-  };
-  const SettingCard = ({
-    icon: Icon,
-    title,
-    description,
-    setting,
-    color = "zinc",
-    children,
-  }) => {
-    const cardColorClasses = {
-      zinc: "hover:shadow-zinc-500/10",
-    };
-    const iconColorClasses = {
-      zinc: "from-zinc-500/20 to-zinc-600/20 group-hover:from-zinc-500/30 group-hover:to-zinc-600/30",
-    };
-    const iconTextColors = {
-      zinc: "text-zinc-400",
-    };
-    return (
-      <div
-        className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900/90 to-zinc-800/90 backdrop-blur-xl border border-zinc-700/50 hover:border-zinc-600/50 transition-all duration-500 hover:shadow-2xl ${cardColorClasses[color] || cardColorClasses.zinc} hover:-translate-y-1`}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-500/5 to-zinc-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <div className="relative p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-4">
-              <div
-                className={`p-3 rounded-xl bg-gradient-to-br transition-all duration-300 ${iconColorClasses[color]?.split(" text-")[0] || iconColorClasses.zinc.split(" text-")[0]}`}
-              >
-                <Icon
-                  className={`h-6 w-6 ${iconColorClasses[color]?.split(" text-")[1] ? "text-" + iconColorClasses[color].split(" text-")[1] : "text-white"}`}
-                />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-white group-hover:text-zinc-300 transition-colors">
-                  {title}
-                </h3>
-                <p className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                  {description}
-                </p>
+  );
+
+  const Card = ({ icon: Icon, title, desc, setting, children, className = "" }) => (
+      <div className={`rounded-xl bg-zinc-900/90 border border-zinc-700/50 p-5 hover:border-zinc-600/50 transition-all ${className}`}>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 rounded-lg bg-zinc-800/50">
+              <Icon className="h-5 w-5 text-zinc-400" />
+            </div>
+            <div>
+              <h3 className="font-medium text-white">{title}</h3>
+              <p className="text-sm text-zinc-400">{desc}</p>
+            </div>
+          </div>
+          {setting && <Toggle enabled={settings[setting]} onToggle={() => toggle(setting)} />}
+        </div>
+        {children}
+      </div>
+  );
+
+  const SubSetting = ({ icon: Icon, label, setting }) => (
+      <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/30 hover:bg-zinc-800/50 transition-colors">
+        <div className="flex items-center space-x-2">
+          <Icon className="h-4 w-4 text-zinc-500" />
+          <span className="text-sm text-zinc-300">{label}</span>
+        </div>
+        <Toggle enabled={settings[setting]} onToggle={() => toggle(setting)} />
+      </div>
+  );
+
+  const Slider = ({ label, value }) => (
+      <div className="mt-3">
+        <div className="flex justify-between text-sm text-zinc-400 mb-1">
+          <span>{label}</span><span>{value}%</span>
+        </div>
+        <div className="h-2 bg-zinc-700 rounded-full">
+          <div className="h-full bg-zinc-500 rounded-full transition-all" style={{ width: `${value}%` }} />
+        </div>
+      </div>
+  );
+
+  const SkeletonCard = ({ hasSubItems = false }) => (
+      <div className="rounded-xl bg-zinc-900/90 border border-zinc-700/50 p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <Skeleton className="w-9 h-9 rounded-lg bg-zinc-800" />
+            <div>
+              <Skeleton className="h-4 w-24 mb-2 bg-zinc-800" />
+              <Skeleton className="h-3 w-32 bg-zinc-800" />
+            </div>
+          </div>
+          <Skeleton className="w-11 h-6 rounded-full bg-zinc-800" />
+        </div>
+        {hasSubItems && (
+            <div className="space-y-2">
+              <Skeleton className="h-3 w-20 mb-2 bg-zinc-800" />
+              <Skeleton className="h-2 w-full mb-4 bg-zinc-800" />
+              <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/30">
+                <div className="flex items-center space-x-2">
+                  <Skeleton className="w-4 h-4 bg-zinc-700" />
+                  <Skeleton className="h-3 w-16 bg-zinc-700" />
+                </div>
+                <Skeleton className="w-8 h-4 rounded-full bg-zinc-700" />
               </div>
             </div>
-            {setting && (
-              <ToggleSwitch
-                enabled={settings[setting]}
-                onToggle={() => toggleSetting(setting)}
-                color={color}
-              />
-            )}
-          </div>
-          {children}
-        </div>
+        )}
       </div>
-    );
-  };
-  const SliderSetting = ({ label, value, color = "zinc" }) => {
-    const sliderColorClasses = {
-      zinc: "from-zinc-400 to-zinc-600 shadow-zinc-500/30",
-    };
+  );
+
+  const SkeletonQuickCard = () => (
+      <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50 border border-zinc-700/30">
+        <div className="flex items-center space-x-3">
+          <Skeleton className="w-5 h-5 bg-zinc-800" />
+          <Skeleton className="h-4 w-20 bg-zinc-800" />
+        </div>
+        <Skeleton className="w-11 h-6 rounded-full bg-zinc-800" />
+      </div>
+  );
+
+  const SkeletonActionCard = () => (
+      <div className="text-center p-4 rounded-lg bg-zinc-800/50">
+        <Skeleton className="w-10 h-10 rounded-lg mx-auto mb-2 bg-zinc-700" />
+        <Skeleton className="h-3 w-16 mx-auto mb-1 bg-zinc-700" />
+        <Skeleton className="h-2 w-20 mx-auto bg-zinc-700" />
+      </div>
+  );
+
+  const ActionCard = ({ icon: Icon, title, desc, color }) => (
+      <div className="text-center p-4 rounded-lg bg-zinc-800/50 hover:bg-zinc-800/70 transition-all hover:scale-105">
+        <div className={`w-10 h-10 bg-gradient-to-br ${color} rounded-lg flex items-center justify-center mx-auto mb-2`}>
+          <Icon className="h-5 w-5" />
+        </div>
+        <h4 className="font-medium text-white text-sm">{title}</h4>
+        <p className="text-xs text-zinc-500">{desc}</p>
+      </div>
+  );
+
+  if (isLoading) {
     return (
-      <div className="mt-4">
-        <div className="flex justify-between text-sm text-zinc-300 mb-2">
-          <span>{label}</span>
-          <span>{value}%</span>
+        <div className="min-h-screen bg-zinc-950 p-6">
+          <div className="max-w-6xl mx-auto">
+            {/* Main Settings Skeleton */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <SkeletonCard hasSubItems />
+              <SkeletonCard hasSubItems />
+              <SkeletonCard hasSubItems />
+              <SkeletonCard hasSubItems />
+              <SkeletonCard hasSubItems />
+              <SkeletonCard hasSubItems />
+            </div>
+
+            {/* Quick Settings Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <SkeletonQuickCard />
+              <SkeletonQuickCard />
+              <SkeletonQuickCard />
+            </div>
+
+            {/* Actions Skeleton */}
+            <div className="rounded-xl bg-zinc-900/50 border border-zinc-700/30 p-6 mb-6">
+              <div className="flex items-center mb-4">
+                <Skeleton className="w-5 h-5 mr-2 bg-zinc-800" />
+                <Skeleton className="h-5 w-32 bg-zinc-800" />
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <SkeletonActionCard />
+                <SkeletonActionCard />
+                <SkeletonActionCard />
+                <SkeletonActionCard />
+              </div>
+            </div>
+
+            {/* Status Skeleton */}
+            <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50 border border-zinc-700/30">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <Skeleton className="w-2 h-2 rounded-full bg-zinc-800" />
+                  <Skeleton className="h-3 w-12 bg-zinc-800" />
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Skeleton className="w-4 h-4 bg-zinc-800" />
+                  <Skeleton className="h-3 w-8 bg-zinc-800" />
+                </div>
+              </div>
+              <Skeleton className="h-3 w-24 bg-zinc-800" />
+            </div>
+          </div>
         </div>
-        <div className="relative h-2 bg-zinc-700 rounded-full overflow-hidden">
-          <div
-            className={`absolute h-full bg-gradient-to-r rounded-full transition-all duration-500 shadow-lg ${sliderColorClasses[color] || sliderColorClasses.zinc}`}
-            style={{ width: `${value}%` }}
-          />
-        </div>
-      </div>
     );
-  };
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-950/20 to-zinc-950/20 p-6">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -right-1/2 w-96 h-96 bg-zinc-500/10 rounded-full blur-3xl animate-pulse" />
-        <div
-          className="absolute -bottom-1/2 -left-1/2 w-96 h-96 bg-zinc-500/10 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "2s" }}
-        />
-        <div
-          className="absolute top-1/3 left-1/3 w-64 h-64 bg-zinc-500/5 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "4s" }}
-        />
-      </div>{" "}
-      <div className="relative max-w-6xl mx-auto">
-        {" "}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <SettingCard
-            icon={settings.darkMode ? Moon : Sun}
-            title="Display & Appearance"
-            description="Customize your visual experience"
-            setting="darkMode"
-            color="zinc"
-          >
-            <SliderSetting label="Brightness" value={75} color="zinc" />
-            <SliderSetting label="Contrast" value={60} color="zinc" />
-          </SettingCard>{" "}
-          <SettingCard
-            icon={Bell}
-            title="Notifications"
-            description="Manage your alerts and sounds"
-            setting="notifications"
-            color="zinc"
-          >
-            <SliderSetting label="Volume" value={80} color="zinc" />
-            <div className="flex items-center justify-between mt-4 p-3 rounded-lg bg-zinc-800/50">
-              <span className="text-sm text-zinc-300">Sound Effects</span>
-              <ToggleSwitch
-                enabled={settings.soundEffects}
-                onToggle={() => toggleSetting("soundEffects")}
-                color="zinc"
-              />
-            </div>
-          </SettingCard>{" "}
-          <SettingCard
-            icon={Shield}
-            title="Privacy & Security"
-            description="Keep your data safe and secure"
-            setting="privacy"
-            color="zinc"
-          >
-            <div className="space-y-3 mt-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800/70 transition-colors">
-                <div className="flex items-center space-x-3">
-                  <Lock className="h-4 w-4 text-zinc-400" />
-                  <span className="text-sm text-zinc-300">Two-Factor Auth</span>
+      <div className="min-h-screen bg-zinc-950 p-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Main Settings */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <Card
+                icon={settings.darkMode ? Moon : Sun}
+                title="Display"
+                desc="Visual preferences"
+                setting="darkMode"
+            >
+              <Slider label="Brightness" value={75} />
+              <Slider label="Contrast" value={60} />
+            </Card>
+
+            <Card icon={Bell} title="Notifications" desc="Alerts and sounds" setting="notifications">
+              <Slider label="Volume" value={80} />
+              <div className="mt-3">
+                <SubSetting icon={Volume2} label="Sound Effects" setting="soundEffects" />
+              </div>
+            </Card>
+
+            <Card icon={Shield} title="Security" desc="Privacy and protection" setting="privacy">
+              <div className="space-y-2">
+                <SubSetting icon={Lock} label="Two-Factor Auth" setting="twoFactor" />
+                <SubSetting icon={Eye} label="Face ID" setting="faceId" />
+              </div>
+            </Card>
+
+            <Card icon={Wifi} title="Connectivity" desc="Network settings" setting="wifi">
+              <div className="space-y-2">
+                <SubSetting icon={Smartphone} label="Bluetooth" setting="bluetooth" />
+                <SubSetting icon={Battery} label="Low Power Mode" setting="lowPowerMode" />
+              </div>
+            </Card>
+
+            <Card icon={Camera} title="Permissions" desc="App access control" setting="camera">
+              <div className="space-y-2">
+                <SubSetting icon={Mic} label="Microphone" setting="microphone" />
+                <SubSetting icon={Globe} label="Location" setting="location" />
+              </div>
+            </Card>
+
+            <Card icon={Zap} title="System" desc="Updates and sync" setting="autoUpdate">
+              <div className="space-y-2">
+                <SubSetting icon={Cloud} label="Cloud Backup" setting="backupCloud" />
+                <SubSetting icon={Download} label="Auto Sync" setting="autoSync" />
+              </div>
+            </Card>
+          </div>
+
+          {/* Quick Settings */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            {[
+              { icon: Mail, title: "Marketing", setting: "marketing" },
+              { icon: MessageSquare, title: "Newsletter", setting: "newsletter" },
+              { icon: User, title: "Analytics", setting: "analytics" }
+            ].map(({ icon: Icon, title, setting }) => (
+                <div key={title} className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50 border border-zinc-700/30">
+                  <div className="flex items-center space-x-3">
+                    <Icon className="h-5 w-5 text-zinc-400" />
+                    <span className="text-white font-medium">{title}</span>
+                  </div>
+                  <Toggle enabled={settings[setting]} onToggle={() => toggle(setting)} />
                 </div>
-                <ToggleSwitch
-                  enabled={settings.twoFactor}
-                  onToggle={() => toggleSetting("twoFactor")}
-                  color="zinc"
-                />
-              </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800/70 transition-colors">
-                <div className="flex items-center space-x-3">
-                  <Eye className="h-4 w-4 text-zinc-400" />
-                  <span className="text-sm text-zinc-300">Face ID</span>
-                </div>
-                <ToggleSwitch
-                  enabled={settings.faceId}
-                  onToggle={() => toggleSetting("faceId")}
-                  color="zinc"
-                />
-              </div>
-            </div>
-          </SettingCard>{" "}
-          <SettingCard
-            icon={Wifi}
-            title="Device & Connectivity"
-            description="Manage your connections"
-            setting="wifi"
-            color="zinc"
-          >
-            <div className="space-y-3 mt-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800/70 transition-colors">
-                <div className="flex items-center space-x-3">
-                  <Smartphone className="h-4 w-4 text-zinc-400" />
-                  <span className="text-sm text-zinc-300">zinctooth</span>
-                </div>
-                <ToggleSwitch
-                  enabled={settings.zinctooth}
-                  onToggle={() => toggleSetting("zinctooth")}
-                  color="zinc"
-                />
-              </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800/70 transition-colors">
-                <div className="flex items-center space-x-3">
-                  <Battery className="h-4 w-4 text-zinc-400" />
-                  <span className="text-sm text-zinc-300">Low Power Mode</span>
-                </div>
-                <ToggleSwitch
-                  enabled={settings.lowPowerMode}
-                  onToggle={() => toggleSetting("lowPowerMode")}
-                  color="zinc"
-                />
-              </div>
-            </div>
-          </SettingCard>{" "}
-          <SettingCard
-            icon={Camera}
-            title="Media & Permissions"
-            description="Control app permissions"
-            setting="camera"
-            color="zinc"
-          >
-            <div className="space-y-3 mt-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800/70 transition-colors">
-                <div className="flex items-center space-x-3">
-                  <Mic className="h-4 w-4 text-zinc-400" />
-                  <span className="text-sm text-zinc-300">Microphone</span>
-                </div>
-                <ToggleSwitch
-                  enabled={settings.microphone}
-                  onToggle={() => toggleSetting("microphone")}
-                  color="zinc"
-                />
-              </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800/70 transition-colors">
-                <div className="flex items-center space-x-3">
-                  <Globe className="h-4 w-4 text-zinc-400" />
-                  <span className="text-sm text-zinc-300">
-                    Location Services
-                  </span>
-                </div>
-                <ToggleSwitch
-                  enabled={settings.location}
-                  onToggle={() => toggleSetting("location")}
-                  color="zinc"
-                />
-              </div>
-            </div>
-          </SettingCard>{" "}
-          <SettingCard
-            icon={Zap}
-            title="System & Updates"
-            description="Keep your system optimized"
-            setting="autoUpdate"
-            color="zinc"
-          >
-            <div className="space-y-3 mt-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800/70 transition-colors">
-                <div className="flex items-center space-x-3">
-                  <Cloud className="h-4 w-4 text-zinc-400" />
-                  <span className="text-sm text-zinc-300">Cloud Backup</span>
-                </div>
-                <ToggleSwitch
-                  enabled={settings.backupCloud}
-                  onToggle={() => toggleSetting("backupCloud")}
-                  color="zinc"
-                />
-              </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800/70 transition-colors">
-                <div className="flex items-center space-x-3">
-                  <Download className="h-4 w-4 text-zinc-400" />
-                  <span className="text-sm text-zinc-300">Auto Sync</span>
-                </div>
-                <ToggleSwitch
-                  enabled={settings.autoSync}
-                  onToggle={() => toggleSetting("autoSync")}
-                  color="zinc"
-                />
-              </div>
-            </div>
-          </SettingCard>
-        </div>{" "}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900/50 to-zinc-900/50 backdrop-blur-xl border border-zinc-500/30 hover:border-zinc-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-zinc-500/20 p-6">
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-500/10 to-zinc-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative">
-              <Mail className="h-8 w-8 text-zinc-400 mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">
-                Email Marketing
-              </h3>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-300">
-                  Promotional emails
-                </span>
-                <ToggleSwitch
-                  enabled={settings.marketing}
-                  onToggle={() => toggleSetting("marketing")}
-                  color="zinc"
-                />
-              </div>
-            </div>
-          </div>{" "}
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900/50 to-zinc-900/50 backdrop-blur-xl border border-zinc-500/30 hover:border-zinc-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-zinc-500/20 p-6">
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-500/10 to-zinc-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative">
-              <MessageSquare className="h-8 w-8 text-zinc-400 mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">
-                Newsletter
-              </h3>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-300">Weekly updates</span>
-                <ToggleSwitch
-                  enabled={settings.newsletter}
-                  onToggle={() => toggleSetting("newsletter")}
-                  color="zinc"
-                />
-              </div>
-            </div>
-          </div>{" "}
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900/50 to-zinc-900/50 backdrop-blur-xl border border-zinc-500/30 hover:border-zinc-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-zinc-500/20 p-6">
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-500/10 to-zinc-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative">
-              <User className="h-8 w-8 text-zinc-400 mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">
-                Analytics
-              </h3>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-300">Usage tracking</span>
-                <ToggleSwitch
-                  enabled={settings.analytics}
-                  onToggle={() => toggleSetting("analytics")}
-                  color="zinc"
-                />
-              </div>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div className="rounded-xl bg-zinc-900/50 border border-zinc-700/30 p-6 mb-6">
+            <h2 className="text-xl font-bold text-white mb-4 flex items-center">
+              <Monitor className="h-5 w-5 text-zinc-400 mr-2" />
+              Quick Actions
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <ActionCard icon={Trash2} title="Clear Cache" desc="Free storage" color="from-red-500/20 to-red-600/20 text-red-400" />
+              <ActionCard icon={Key} title="API Keys" desc="Integrations" color="from-blue-500/20 to-blue-600/20 text-blue-400" />
+              <ActionCard icon={CreditCard} title="Billing" desc="Payments" color="from-green-500/20 to-green-600/20 text-green-400" />
+              <ActionCard icon={Volume2} title="Audio" desc="Sound settings" color="from-purple-500/20 to-purple-600/20 text-purple-400" />
             </div>
           </div>
-        </div>{" "}
-        <div className="rounded-3xl bg-gradient-to-br from-zinc-900/90 to-zinc-800/90 backdrop-blur-xl border border-zinc-700/50 p-8 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-            <Monitor className="h-6 w-6 text-zinc-400 mr-3" />
-            Advanced Controls
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center p-4 rounded-xl bg-zinc-800/50 hover:bg-zinc-800/70 transition-all duration-300 hover:scale-105">
-              <div className="w-12 h-12 bg-gradient-to-br from-red-500/20 to-red-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Trash2 className="h-6 w-6 text-red-400" />
+
+          {/* Status */}
+          <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50 border border-zinc-700/30">
+            <div className="flex items-center space-x-4 text-sm text-zinc-400">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span>Online</span>
               </div>
-              <h3 className="font-semibold text-white mb-1">Clear Cache</h3>
-              <p className="text-xs text-zinc-400">Free up storage space</p>
-            </div>{" "}
-            <div className="text-center p-4 rounded-xl bg-zinc-800/50 hover:bg-zinc-800/70 transition-all duration-300 hover:scale-105">
-              <div className="w-12 h-12 bg-gradient-to-br from-sky-500/20 to-sky-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Key className="h-6 w-6  text-sky-400" />
+              <div className="flex items-center space-x-1">
+                <Battery className="h-4 w-4" />
+                <span>87%</span>
               </div>
-              <h3 className="font-semibold text-white mb-1">API Keys</h3>
-              <p className="text-xs text-zinc-400">Manage integrations</p>
-            </div>{" "}
-            <div className="text-center p-4 rounded-xl bg-zinc-800/50 hover:bg-zinc-800/70 transition-all duration-300 hover:scale-105">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <CreditCard className="h-6 w-6 text-green-400" />
-              </div>
-              <h3 className="font-semibold text-white mb-1">Billing</h3>
-              <p className="text-xs text-zinc-400">Payment settings</p>
-            </div>{" "}
-            <div className="text-center p-4 rounded-xl bg-zinc-800/50 hover:bg-zinc-800/70 transition-all duration-300 hover:scale-105">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Volume2 className="h-6 w-6 text-purple-400" />
-              </div>
-              <h3 className="font-semibold text-white mb-1">Audio</h3>
-              <p className="text-xs text-zinc-400">Sound preferences</p>
             </div>
+            <span className="text-sm text-zinc-500">Last sync: 2m ago</span>
           </div>
-        </div>{" "}
-        <div className="flex items-center justify-between p-6 rounded-2xl bg-gradient-to-r from-zinc-900/90 to-zinc-800/90 backdrop-blur-xl border border-zinc-700/50">
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-zinc-400 rounded-full animate-pulse" />
-              <span className="text-sm text-zinc-300">
-                System Status: Online
-              </span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Battery className="h-4 w-4 text-zinc-400" />
-              <span className="text-sm text-zinc-300">Battery: 87%</span>
-            </div>
-          </div>
-          <div className="text-sm text-zinc-400">Last sync: 2 minutes ago</div>
         </div>
       </div>
-    </div>
   );
 };
+
 export default SettingsComponent;

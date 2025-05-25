@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import  {memo, useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 import {Button} from "@/components/ui/button";
 import {Card, CardContent} from "@/components/ui/card";
@@ -39,7 +39,7 @@ import {Calendar} from "@/components/ui/calendar";
 import {cn} from "@/lib/utils";
 import {format} from "date-fns";
 
-const ExpenseTable = React.memo(
+const ExpenseTable = memo(
   ({
     expenses,
     categories,
@@ -253,7 +253,7 @@ const ExpenseTable = React.memo(
     );
   },
 );
-const ExpenseFilters = React.memo(
+const ExpenseFilters = memo(
   ({
     searchQuery,
     setSearchQuery,
@@ -400,7 +400,7 @@ export default function Expenses() {
     };
     loadData();
   }, [searchParams]);
-  const filteredExpenses = React.useMemo(() => {
+  const filteredExpenses = useMemo(() => {
     return expenses
       .filter((expense) => {
         if (viewType === "active" && expense.deletedAt) return false;
