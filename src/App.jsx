@@ -28,7 +28,7 @@ function App() {
         setTimeout(() => setIsLoading(false), 300);
       }
     };
-    loadInitialData().then((response) => console.log(response.data));
+    loadInitialData()
   }, []);
   if (isLoading) {
     return (
